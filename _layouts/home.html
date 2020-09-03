@@ -45,25 +45,24 @@ layout: page
 
 <div id="post-list">
 
-  {% for post in posts %}
+{% for post in posts %}
 
 
-  <div class="post-preview">
-    <div class="mr-auto p-3 d-flex flex-row align-items-center ">
-      <img src="{{ site.baseurl }}{{ post.image }}" width="200">
-      <div class="mr-auto p-5 d-flex flex-column align-items-left">
-        <h1><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h1>
-        {% if post.pin == true %}
-        <i class="fas fa-thumbtack fa-fw text-muted mt-1 ml-2 mt-xl-2" data-toggle="tooltip" data-placement="left"
-          title="Pinned"></i>
+<div class="post-preview">
+  <div class="mr-auto p-3 d-flex flex-row align-items-center ">
+    <img src="{{ site.baseurl }}{{ post.image }}" width="200">
+    <div class="mr-auto p-5 d-flex flex-column align-items-left">
+    <h1><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h1>
+      {% if post.pin == true %}
+      <i class="fas fa-thumbtack fa-fw text-muted mt-1 ml-2 mt-xl-2" data-toggle="tooltip" data-placement="left"
+      title="Pinned"></i>
 
-        {% endif %}
-        <div class="post-content">
-          <p>
-            {% include no-linenos.html content=post.content %}
-            {{ content | markdownify | strip_html | truncate: 100 }}
-          </p>
-        </div>
+      {% endif %}
+      <div class="post-content">
+        <p>
+          {% include no-linenos.html content=post.content %}
+          {{ content | markdownify | strip_html | truncate: 100 }}
+        </p>
       </div>
     </div>
   </div>
