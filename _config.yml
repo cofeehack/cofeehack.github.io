@@ -13,9 +13,7 @@ title: ConnorsEH                          # the main title
 tagline: Graduate | HTC Newbie | CTF Player  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  A minimal, portfolio, sidebar,
-  bootstrap Jekyll theme with responsive web design
-  and focuses on text presentation.
+  A look into my ethical hacking journey.
 
 # Replace with the website url, e.g. 'https://username.github.io'
 url: 'https://connorseh.com'
