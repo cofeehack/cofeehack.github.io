@@ -1243,7 +1243,7 @@ div.post-content .table-wrapper {
     -webkit-box-flex: 0;
     -ms-flex: 0 0 100%;
     flex: 0 0 100%;
-    max-width: 100%;
+  // max-width: 100%;
     padding-left: 3%;
   }
 
@@ -1298,9 +1298,9 @@ div.post-content .table-wrapper {
 
   #main > div.row {
     padding-left: calc((100% - #{$main-content-max-width}) / 2);
-    >div.col-xl-8 {
-      max-width: 850px;
-    }
+    //>div.col-xl-8 {
+    //  max-width: 850px;
+    //}
   }
 
   #search-result-wrapper {
