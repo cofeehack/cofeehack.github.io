@@ -111,12 +111,19 @@
   #post-list .post-meta>span i:not(:first-child) {
     margin-left: 1rem;
   }
+
+  .img{
+    width: "50%";
+  }
 }
 
 /* Hide SideBar and TOC */
 @media all and (max-width: 830px) {
   .pagination {
     justify-content: center;
+  }
+  .img{
+    width: "60%";
   }
 }
 
@@ -141,5 +148,8 @@
 @media all and (max-width: 1200px) {
   #post-list {
     padding-right: 0;
+  }
+  .img{
+    width: "75%";
   }
 }
