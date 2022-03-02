@@ -162,7 +162,7 @@ gdb-peda$ pattern_offset 0x41417741
 
 Now lets get the address of `flag()`
 
-```c
+```x86asm
 gdb-peda$ disas flag
 Dump of assembler code for function flag:
    0x080491e2 <+0>:     push   ebp
