@@ -75,7 +75,7 @@ Nmap done: 1 IP address (1 host up) scanned in 80.07 seconds</pre>
 
 From nmap, we can see SSH on Port 22, and a HTTP server on port 80. Browsing to the website, we are met with the following landing page:
 
-![](/assets/img/Icons/RouterSpace/routerspacewebpage.png)
+![HomePage](/assets/img/Icons/RouterSpace/routerspacewebpage.png)
 
 The site displays information on an application called RouterSpace,  that can connect routers to routerspace. The site allows us to download `routerspace.apk`, an android application.
 
@@ -97,14 +97,14 @@ Once anbox was installed, i installed the `routerspace.apk` package into anbox u
 
 I then launched anbox, ran routerspace and was presented with an application screen with a "Check Status" button:
 
-![](/assets/img/Icons/RouterSpace/routerspaceapp.png)
+![app](/assets/img/Icons/RouterSpace/routerspaceapp.png)
 
 So i decided to try and capture the request with burp.
 
 ### Burp
 After launching burp, i went to Proxy Options > Proxy Listeners. I added a listener on port 8000, using my tun0 IP address `10.10.14.49`.
 
-![](/assets/img/Icons/RouterSpace/burp-listener.png)
+![burp](/assets/img/Icons/RouterSpace/burp-listener.png)
 
 Now i needed to add the burp proxy to anbox, and i did this using 
 
@@ -112,21 +112,21 @@ Now i needed to add the burp proxy to anbox, and i did this using
 
 Now when clicking "Check Status", burp caught the POST request and returned the following:
 
-![](/assets/img/Icons/RouterSpace/burp-POST.png)
+![burp2](/assets/img/Icons/RouterSpace/burp-POST.png)
 
 I then sent this request to repeater, and played around with the request. By editing the JSON ip field, and inputting a `;`, i was able to input a command and the remote target would execute it. For this POST request, i used `"IP":";whoami"`, and in the responce received `"\npaul\n"`. 
-![](/assets/img/Icons/RouterSpace/burp-lspaul.png)
+![burp3](/assets/img/Icons/RouterSpace/burp-lspaul.png)
 
 Knowing that the user is Paul, lets have a look inside his directory:
 
-![](/assets/img/Icons/RouterSpace/burp-whoami.png)
+![burp4](/assets/img/Icons/RouterSpace/burp-whoami.png)
 
 We can see a user.txt, but when trying to cat it, the resulting hash is the incorrect flag.
 ## Exploiting RouterSpace
 From here, i tried executing different commands to attempt to launch a reverse shell, but i was unable too. This got me thinking about a potential SSH foothold, due to port 22 being open. Lets see if Paul has a .ssh directory
 `"ip":";ls -la /home/paul/.ssh"`
 
-![](/assets/img/Icons/RouterSpace/burp-sshresponce.png)
+![burp5](/assets/img/Icons/RouterSpace/burp-sshresponce.png)
 
 There is a .ssh directory, but there is no public `id_rsa` key within it, which means i can potentially add my own, and then SSH into the target host.
 
@@ -174,11 +174,11 @@ Using burp, i can echo the key into the `.ssh` directory, in a file called `auth
 
 `{"ip":";echo '<Generated Key>' >> /home/paul/.ssh/authorized_keys"}`
 
-![](/assets/img/Icons/RouterSpace/burp-adding-sshkey.png)
+![burp](/assets/img/Icons/RouterSpace/burp-adding-sshkey.png)
 
 As we can see from the image below, the file was created. However, as a Brit, i spelt the directory wrong and used an `s` instead of a `z` - Oops.
 
-![](/assets/img/Icons/RouterSpace/burp-wrong-s.png)
+![burp](/assets/img/Icons/RouterSpace/burp-wrong-s.png)
 
 From here, i re-uploaded the key to the correct directory, and attempted to connect via SSH.
 
@@ -237,7 +237,7 @@ Instead, i can use Secure Copy `scp` to upload the file from my local host to th
 
 `scp -P 22 ../Desktop/linpeas.sh paul@10.10.11.148:/home/paul`
 
-![](/assets/img/Icons/RouterSpace/linpeas-proof.png)
+![linpeas](/assets/img/Icons/RouterSpace/linpeas-proof.png)
 
 Initially, i attempted to use PwnKit on the machine, as linpeas recommended it.
 
@@ -277,7 +277,7 @@ Initially, i attempted to use PwnKit on the machine, as linpeas recommended it.
 
 
 After looking through linpeas again, i noticed that the host is running a vulnerable version of sudo `1.8.31`, but for some reason linpeas didn't report the CVE issue. 
-![](/assets/img/Icons/RouterSpace/sudo-version.png)
+![sudo](/assets/img/Icons/RouterSpace/sudo-version.png)
 One way to test whether sudo is vulnerable to CVE-2021-3156 or not is to run `sudoedit -s /`, if sudo asks for the users password, it is likely vulnerable.
 
 After googling exploits related to the CVE, i decided to use the following exploit:
