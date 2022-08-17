@@ -1,6 +1,6 @@
 ---
 title: HackTheBox - RouterSpace
-date: 2022-08-17 13:00:00 +/- 0000
+date: 2022-08-17 20:00:00 +/- 0000
 categories: [HackTheBox,Easy]
 author: Connor
 tags: [routerspace, android]
