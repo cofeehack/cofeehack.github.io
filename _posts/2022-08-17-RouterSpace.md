@@ -3,12 +3,14 @@ title: HackTheBox - RouterSpace
 date: 2022-08-17 20:00:00 +/- 0000
 categories: [HackTheBox,Easy]
 author: Connor
-tags: [routerspace, android]
+tags: [routerspace,android]
 image: /assets/img/Icons/RouterSpace/routerspace.png
 ---
 
 # RouterSpace
+---
 Initial configuration for this machine was very annoying, but once i got anbox working correctly it was rather straight forward. 
+---
 ## Recon
 <pre>
 ──(root💀Kali)-[~]
