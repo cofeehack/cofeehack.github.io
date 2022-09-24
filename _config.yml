@@ -36,6 +36,10 @@ social:
     - https://twitter.com/C_Weeks_Pearson      # change to your twitter homepage
     - https://github.com/cofeehack       # change to your github homepage
     - https://www.linkedin.com/in/edwinrr
+    
+    # Uncomment below to add more social links
+    # - https://www.facebook.com/username
+    - https://www.linkedin.com/in/edwinrr
 
 google_site_verification: google_meta_tag_verification # change to your verification string
 
