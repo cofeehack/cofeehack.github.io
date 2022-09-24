@@ -18,7 +18,7 @@ description: >-                        # used by seo meta and the atom feed
 # Replace with the website url, e.g. 'https://username.github.io'
 url: 'https://cofeehack.github.io'
 
-author: Edwin Rodriguez                # change to your full name
+author: Edwin R&R                # change to your full name
 
 avatar: /assets/img/logo/CEH-new.png  # support internet resources
 
@@ -38,7 +38,6 @@ social:
     - https://www.linkedin.com/in/edwinrr
     
     # Uncomment below to add more social links
-    # - https://www.facebook.com/username
     - https://www.linkedin.com/in/edwinrr
 
 google_site_verification: google_meta_tag_verification # change to your verification string
