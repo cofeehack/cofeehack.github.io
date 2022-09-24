@@ -18,7 +18,7 @@ description: >-                        # used by seo meta and the atom feed
 # Replace with the website url, e.g. 'https://username.github.io'
 url: 'https://connorseh.com'
 
-author: ConnorWP                 # change to your full name
+author: Edwin Rodriguez                # change to your full name
 
 avatar: /assets/img/logo/CEH-new.png  # support internet resources
 
@@ -29,12 +29,12 @@ twitter:
   username: edwinbmx31           # change to your twitter username
 
 social:
-  name: ConnorDWP                  # it will shows as the copyright owner in Footer
+  name: Edwin Rodriguez                  # it will shows as the copyright owner in Footer
   email: edwinbmx123@hotmail.com            # change to your email address
   links:
     # The first element serves as the copyright owner's link
     - https://twitter.com/C_Weeks_Pearson      # change to your twitter homepage
-    - https://github.com/ConnorDWP       # change to your github homepage
+    - https://github.com/cofeehack       # change to your github homepage
     - https://www.linkedin.com/in/edwinrr
 
 google_site_verification: google_meta_tag_verification # change to your verification string
@@ -47,7 +47,7 @@ google_site_verification: google_meta_tag_verification # change to your verifica
 baseurl: ''
 
 # Change to your timezone › http://www.timezoneconverter.com/cgi-bin/findzone/findzone
-timezone: Europe/London
+timezone: America/Bogota
 
 google_analytics:
   id: UA-178517167-1          # Fill with your Google Analytics ID
