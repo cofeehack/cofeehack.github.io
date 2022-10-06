@@ -14,4 +14,8 @@ title: About
 
 For a long time, I have been interested in the platforms that allow me to get to know the passionate world of CYBERSECURITY in Pentesting to improve my Scanning, exploiting and privilege escalation skills. At first the very interesting page hackthebox.eu/ is quite good to start and improve the virtue of patience when working with pestesting and hacking.
 
-(assets/img/Icons/About-me/mifoto.png)
+### User
+
+![user](/assets/img/Icons/About-me/mifoto.png)
+
+Thank you for visiting my website!
